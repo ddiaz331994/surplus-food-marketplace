@@ -12,6 +12,7 @@ System design: [`docs/design.md`](docs/design.md). Wireframes: [`docs/wireframes
 
 ## Contents
 
+0. [Quick setup (one command)](#quick-setup-one-command)
 1. [Run the app on a new device (for testing)](#1-run-the-app-on-a-new-device-for-testing)
 2. [Set up a device to contribute](#2-set-up-a-device-to-contribute)
 3. [Command reference](#3-command-reference)
@@ -19,9 +20,38 @@ System design: [`docs/design.md`](docs/design.md). Wireframes: [`docs/wireframes
 
 ---
 
+## Quick setup (one command)
+
+A setup script installs everything for you: the tools (Git, uv, Node.js, Docker, GDAL), the `.env` files with a generated secret key, the backend and frontend packages, and the database. It is safe to run again: it skips anything already installed and never overwrites your `.env` files.
+
+**1. Get the code.** You need Git to clone. If you don't have it yet, download the ZIP from the GitHub repo page (**Code → Download ZIP**) and unzip it instead.
+
+```sh
+git clone https://github.com/ddiaz331994/surplus-food-marketplace.git
+cd surplus-food-marketplace
+```
+
+**2. Run the setup script.**
+
+| OS | Command (from the repo root) |
+| --- | --- |
+| Windows | Double-click `setup.cmd`, or run `.\setup.cmd` in a terminal |
+| macOS / Linux (Debian/Ubuntu) | `bash scripts/setup.sh` |
+
+If you already have the tools and only want the project set up, run `.\setup.cmd -ProjectOnly` (Windows) or `bash scripts/setup.sh --project-only` (macOS/Linux).
+
+**3. Follow the "Next steps" it prints.** Create your admin login, start the backend and frontend, and open http://localhost:5173. These are the same as [1.5](#15-set-up-and-start-the-backend) to [1.7](#17-open-the-app) below.
+
+Notes:
+- **Docker first run:** if Docker gets installed during setup, the script stops and asks you to restart (Windows), open Docker Desktop once (macOS) or sign out and back in (Linux). Run the script again afterwards and it picks up where it left off.
+- **Requirements:** Windows needs `winget`, which is built into Windows 10/11. macOS needs [Homebrew](https://brew.sh). Linux setup uses `sudo` for apt and Docker.
+- **If the script fails:** it shows which step failed. The manual steps below do the same thing one at a time.
+
+---
+
 ## 1. Run the app on a new device (for testing)
 
-Follow this section if you only want to get the app running and click around.
+Follow this section if you only want to get the app running and click around. The [quick setup](#quick-setup-one-command) script does all the installing in steps 1.1 to 1.6 for you. You still create the admin login and start the servers yourself.
 
 ### 1.1 Install the prerequisites
 
@@ -135,7 +165,7 @@ Generate a secret key and paste it into `backend/.env` as `DJANGO_SECRET_KEY=...
 
 ```sh
 cd backend
-uv run python -c "from django.core.management.utils import get_random_secret_key as g; print(g())"
+uv run python -c "import secrets; print(secrets.token_urlsafe(50))"
 cd ..
 ```
 
