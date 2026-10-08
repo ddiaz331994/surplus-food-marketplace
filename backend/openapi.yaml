@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  title: Surplus Food Marketplace API
+  version: 0.1.0
+paths:
+  /api/health/:
+    get:
+      operationId: health_retrieve
+      description: Liveness check. server_time lets clients compute their clock offset
+        for countdowns.
+      tags:
+      - health
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+components:
+  schemas:
+    Health:
+      type: object
+      properties:
+        status:
+          type: string
+        postgis:
+          type: string
+        server_time:
+          type: string
+          format: date-time
+      required:
+      - postgis
+      - server_time
+      - status
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
