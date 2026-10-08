@@ -26,6 +26,12 @@ if os.name == "nt":
     GDAL_LIBRARY_PATH = str(next((OSGEO4W_ROOT / "bin").glob("gdal[0-9]*.dll")))
     GEOS_LIBRARY_PATH = str(OSGEO4W_ROOT / "bin" / "geos_c.dll")
 
+# Any OS: explicit paths win (e.g. Homebrew on Apple Silicon: /opt/homebrew/lib/libgdal.dylib).
+if env("GDAL_LIBRARY_PATH", default=None):
+    GDAL_LIBRARY_PATH = env("GDAL_LIBRARY_PATH")
+if env("GEOS_LIBRARY_PATH", default=None):
+    GEOS_LIBRARY_PATH = env("GEOS_LIBRARY_PATH")
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
